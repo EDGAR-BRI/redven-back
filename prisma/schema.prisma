@@ -1,0 +1,174 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id            String         @id @default(uuid()) @db.Uuid
+  email         String         @unique
+  full_name     String?
+  role          String         @default("user")
+  avatar_url    String?
+  phone         String?
+  created_at    DateTime       @default(now())
+  updated_at    DateTime       @updatedAt
+  sos           SOS[]
+  reports       Report[]
+  chat_messages ChatMessage[]
+  volunteers    Volunteer[]
+}
+
+model SOS {
+  id              String   @id @default(uuid()) @db.Uuid
+  status          String   @default("active")
+  incident_status String   @default("pending")
+  name            String?
+  phone           String?
+  description     String?
+  lat             Float
+  lng             Float
+  location_label  String?
+  priority        String   @default("critical")
+  people_count    Int      @default(1)
+  category        String   @default("other")
+  user_id         String?  @db.Uuid
+  user            User?    @relation(fields: [user_id], references: [id])
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+
+  @@index([status])
+  @@index([lat, lng])
+}
+
+model Person {
+  id                 String    @id @default(uuid()) @db.Uuid
+  full_name          String
+  status             String    @default("missing")
+  age                Int?
+  gender             String    @default("unknown")
+  photo_url          String?
+  description        String?
+  last_seen_location String?
+  lat                Float?
+  lng                Float?
+  source             String    @default("user_report")
+  source_url         String?
+  last_seen_date     DateTime?
+  face_metadata      String?
+  match_confidence   Float?
+  contact_phone      String?
+  created_at         DateTime  @default(now())
+  updated_at         DateTime  @updatedAt
+
+  @@index([status])
+  @@index([source])
+  @@index([full_name])
+}
+
+model Alert {
+  id         String   @id @default(uuid()) @db.Uuid
+  title      String
+  description String?
+  source     String   @default("usgs")
+  alert_type String   @default("earthquake")
+  severity   String   @default("watch")
+  lat        Float?
+  lng        Float?
+  region     String?
+  event_time DateTime?
+  is_active  Boolean  @default(true)
+  created_at DateTime @default(now())
+
+  @@index([alert_type])
+  @@index([severity])
+  @@index([is_active])
+}
+
+model ChatMessage {
+  id           String   @id @default(uuid()) @db.Uuid
+  sector       String   @default("general")
+  content      String
+  author_name  String?
+  message_type String   @default("message")
+  tag          String   @default("none")
+  item_name    String?
+  quantity     Float?
+  unit         String?
+  lat          Float?
+  lng          Float?
+  status       String   @default("pending")
+  user_id      String?  @db.Uuid
+  user         User?    @relation(fields: [user_id], references: [id])
+  created_at   DateTime @default(now())
+
+  @@index([sector])
+  @@index([tag])
+}
+
+model HelpResource {
+  id             String   @id @default(uuid()) @db.Uuid
+  name           String
+  type           String   @default("food")
+  quantity       Float    @default(0)
+  unit           String?
+  lat            Float?
+  lng            Float?
+  location_label String?
+  status         String   @default("available")
+  manager        String?
+  contact_phone  String?
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
+
+  @@index([type])
+  @@index([status])
+  @@index([lat, lng])
+}
+
+model Report {
+  id             String   @id @default(uuid()) @db.Uuid
+  title          String
+  description    String?
+  category       String   @default("infrastructure")
+  severity       String   @default("medium")
+  photo_url      String?
+  lat            Float?
+  lng            Float?
+  location_label String?
+  status         String   @default("pending")
+  reporter_name  String?
+  user_id        String?  @db.Uuid
+  user           User?    @relation(fields: [user_id], references: [id])
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
+
+  @@index([category])
+  @@index([severity])
+  @@index([status])
+}
+
+model Volunteer {
+  id              String   @id @default(uuid()) @db.Uuid
+  full_name       String
+  expertise       String   @default("first_aid")
+  zone            String?
+  lat             Float?
+  lng             Float?
+  availability    String   @default("available")
+  phone           String?
+  bio             String?
+  certifications  String?
+  user_id         String?  @db.Uuid
+  user            User?    @relation(fields: [user_id], references: [id])
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+
+  @@index([expertise])
+  @@index([availability])
+  @@index([lat, lng])
+}
