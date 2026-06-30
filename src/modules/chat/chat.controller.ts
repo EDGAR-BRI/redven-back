@@ -26,7 +26,7 @@ export async function list(req: Request, res: Response) {
 export async function updateStatus(req: Request, res: Response) {
   try {
     const { status } = req.body;
-    const message = await chatService.updateMessageStatus(req.params.id, status);
+    const message = await chatService.updateMessageStatus(req.params.id as string, status);
     res.json(message);
   } catch {
     res.status(500).json({ error: 'Error al actualizar mensaje' });
@@ -35,7 +35,7 @@ export async function updateStatus(req: Request, res: Response) {
 
 export async function sectorStats(req: Request, res: Response) {
   try {
-    const stats = await chatService.getSectorStats(req.params.sector);
+    const stats = await chatService.getSectorStats(req.params.sector as string);
     res.json(stats);
   } catch {
     res.status(500).json({ error: 'Error al obtener estadísticas' });

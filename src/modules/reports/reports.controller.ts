@@ -22,7 +22,7 @@ export async function list(req: Request, res: Response) {
 
 export async function getById(req: Request, res: Response) {
   try {
-    const report = await reportsService.getReportById(req.params.id);
+    const report = await reportsService.getReportById(req.params.id as string);
     if (!report) return res.status(404).json({ error: 'Reporte no encontrado' });
     res.json(report);
   } catch {
@@ -32,7 +32,7 @@ export async function getById(req: Request, res: Response) {
 
 export async function update(req: Request, res: Response) {
   try {
-    const report = await reportsService.updateReport(req.params.id, req.body);
+    const report = await reportsService.updateReport(req.params.id as string, req.body);
     res.json(report);
   } catch {
     res.status(500).json({ error: 'Error al actualizar reporte' });
@@ -41,7 +41,7 @@ export async function update(req: Request, res: Response) {
 
 export async function remove(req: Request, res: Response) {
   try {
-    await reportsService.deleteReport(req.params.id);
+    await reportsService.deleteReport(req.params.id as string);
     res.status(204).send();
   } catch {
     res.status(500).json({ error: 'Error al eliminar reporte' });

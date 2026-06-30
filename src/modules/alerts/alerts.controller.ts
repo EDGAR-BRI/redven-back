@@ -21,7 +21,7 @@ export async function list(req: Request, res: Response) {
 
 export async function getById(req: Request, res: Response) {
   try {
-    const alert = await alertsService.getAlertById(req.params.id);
+    const alert = await alertsService.getAlertById(req.params.id as string);
     if (!alert) return res.status(404).json({ error: 'Alerta no encontrada' });
     res.json(alert);
   } catch {
@@ -31,7 +31,7 @@ export async function getById(req: Request, res: Response) {
 
 export async function update(req: Request, res: Response) {
   try {
-    const alert = await alertsService.updateAlert(req.params.id, req.body);
+    const alert = await alertsService.updateAlert(req.params.id as string, req.body);
     res.json(alert);
   } catch {
     res.status(500).json({ error: 'Error al actualizar alerta' });
@@ -40,7 +40,7 @@ export async function update(req: Request, res: Response) {
 
 export async function remove(req: Request, res: Response) {
   try {
-    await alertsService.deleteAlert(req.params.id);
+    await alertsService.deleteAlert(req.params.id as string);
     res.status(204).send();
   } catch {
     res.status(500).json({ error: 'Error al eliminar alerta' });
