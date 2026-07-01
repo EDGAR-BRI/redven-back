@@ -21,7 +21,7 @@ export async function list(req: Request, res: Response) {
 
 export async function getById(req: Request, res: Response) {
   try {
-    const person = await personsService.getPersonById(req.params.id);
+    const person = await personsService.getPersonById(req.params.id as string);
     if (!person) return res.status(404).json({ error: 'Persona no encontrada' });
     res.json(person);
   } catch {
@@ -31,7 +31,7 @@ export async function getById(req: Request, res: Response) {
 
 export async function update(req: Request, res: Response) {
   try {
-    const person = await personsService.updatePerson(req.params.id, req.body);
+    const person = await personsService.updatePerson(req.params.id as string, req.body);
     res.json(person);
   } catch {
     res.status(500).json({ error: 'Error al actualizar persona' });
@@ -40,7 +40,7 @@ export async function update(req: Request, res: Response) {
 
 export async function remove(req: Request, res: Response) {
   try {
-    await personsService.deletePerson(req.params.id);
+    await personsService.deletePerson(req.params.id as string);
     res.status(204).send();
   } catch {
     res.status(500).json({ error: 'Error al eliminar persona' });

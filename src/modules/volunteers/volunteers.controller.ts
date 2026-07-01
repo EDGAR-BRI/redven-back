@@ -22,7 +22,7 @@ export async function list(req: Request, res: Response) {
 
 export async function getById(req: Request, res: Response) {
   try {
-    const volunteer = await volunteersService.getVolunteerById(req.params.id);
+    const volunteer = await volunteersService.getVolunteerById(req.params.id as string);
     if (!volunteer) return res.status(404).json({ error: 'Voluntario no encontrado' });
     res.json(volunteer);
   } catch {
@@ -32,7 +32,7 @@ export async function getById(req: Request, res: Response) {
 
 export async function update(req: Request, res: Response) {
   try {
-    const volunteer = await volunteersService.updateVolunteer(req.params.id, req.body);
+    const volunteer = await volunteersService.updateVolunteer(req.params.id as string, req.body);
     res.json(volunteer);
   } catch {
     res.status(500).json({ error: 'Error al actualizar voluntario' });
@@ -41,7 +41,7 @@ export async function update(req: Request, res: Response) {
 
 export async function remove(req: Request, res: Response) {
   try {
-    await volunteersService.deleteVolunteer(req.params.id);
+    await volunteersService.deleteVolunteer(req.params.id as string);
     res.status(204).send();
   } catch {
     res.status(500).json({ error: 'Error al eliminar voluntario' });
