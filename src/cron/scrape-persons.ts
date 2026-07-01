@@ -27,7 +27,11 @@ async function upsertPersonsFromScrape(persons: Awaited<ReturnType<typeof scrape
       });
 
       if (existing) {
-        await prisma.person.update({ where: { id: existing.id }, data: validated.data });
+        const updateData = { ...validated.data };
+        if (!updateData.photo_url && existing.photo_url) {
+          updateData.photo_url = existing.photo_url;
+        }
+        await prisma.person.update({ where: { id: existing.id }, data: updateData });
         updated++;
       } else {
         const coords = p.last_seen_location ? await geocodeLocation(p.last_seen_location) : null;

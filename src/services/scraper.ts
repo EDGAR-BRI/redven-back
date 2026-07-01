@@ -36,7 +36,7 @@ export async function scrapeVenezuelaTeBusca(): Promise<ScrapedPerson[]> {
           : 'missing';
 
       const imgEl = $(el).find('img').first();
-      const photo_url = imgEl.attr('src') || imgEl.attr('data-src') || undefined;
+      const photo_url = imgEl.attr('src') || imgEl.attr('data-src') || imgEl.attr('data-lazy-src') || $(el).find('[style*="background-image"]').attr('style')?.match(/url\(["']?(.+?)["']?\)/)?.[1] || undefined;
 
       const locationEl = $(el).find('.location, .ubicacion, .text-muted, td:nth-child(3)').first();
       const last_seen_location = locationEl.text().trim() || undefined;
@@ -100,9 +100,12 @@ export async function scrapeRedAyudaVenezuela(): Promise<{
         const nameEl = $(el).find('h2, h3, h4, strong, b').first();
         const name = nameEl.text().trim();
         if (name && name.length >= 3) {
+          const imgEl = $(el).find('img').first();
+          const photo_url = imgEl.attr('src') || imgEl.attr('data-src') || imgEl.attr('data-lazy-src') || undefined;
           persons.push({
             full_name: name,
             status: 'missing',
+            photo_url,
             source_url: 'https://redayudavenezuela.com/',
           });
         }
