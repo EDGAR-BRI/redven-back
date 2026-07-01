@@ -17,7 +17,7 @@ export async function register(data: RegisterInput) {
 
   await prisma.user.create({
     data: {
-      id: authData.user.id,
+      id: authData.user!.id,
       email: data.email,
       full_name: data.full_name,
       role: 'user',
@@ -26,8 +26,8 @@ export async function register(data: RegisterInput) {
 
   return {
     user: {
-      id: authData.user.id,
-      email: authData.user.email,
+      id: authData.user!.id,
+      email: authData.user!.email,
       full_name: data.full_name,
     },
   };
@@ -43,13 +43,13 @@ export async function login(data: LoginInput) {
 
   return {
     user: {
-      id: authData.user.id,
-      email: authData.user.email,
+      id: authData.user!.id,
+      email: authData.user!.email,
     },
     session: {
-      access_token: authData.session.access_token,
-      refresh_token: authData.session.refresh_token,
-      expires_at: authData.session.expires_at,
+      access_token: authData.session!.access_token,
+      refresh_token: authData.session!.refresh_token,
+      expires_at: authData.session!.expires_at,
     },
   };
 }
@@ -65,13 +65,13 @@ export async function verifyOtp(data: VerifyOtpInput) {
 
   return {
     user: {
-      id: authData.user.id,
-      email: authData.user.email,
+      id: authData.user!.id,
+      email: authData.user!.email,
     },
     session: {
-      access_token: authData.session.access_token,
-      refresh_token: authData.session.refresh_token,
-      expires_at: authData.session.expires_at,
+      access_token: authData.session!.access_token,
+      refresh_token: authData.session!.refresh_token,
+      expires_at: authData.session!.expires_at,
     },
   };
 }

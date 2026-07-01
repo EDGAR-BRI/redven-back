@@ -21,7 +21,7 @@ export async function list(req: Request, res: Response) {
 
 export async function getById(req: Request, res: Response) {
   try {
-    const resource = await resourcesService.getResourceById(req.params.id);
+    const resource = await resourcesService.getResourceById(req.params.id as string);
     if (!resource) return res.status(404).json({ error: 'Recurso no encontrado' });
     res.json(resource);
   } catch {
@@ -31,7 +31,7 @@ export async function getById(req: Request, res: Response) {
 
 export async function update(req: Request, res: Response) {
   try {
-    const resource = await resourcesService.updateResource(req.params.id, req.body);
+    const resource = await resourcesService.updateResource(req.params.id as string, req.body);
     res.json(resource);
   } catch {
     res.status(500).json({ error: 'Error al actualizar recurso' });
@@ -40,7 +40,7 @@ export async function update(req: Request, res: Response) {
 
 export async function remove(req: Request, res: Response) {
   try {
-    await resourcesService.deleteResource(req.params.id);
+    await resourcesService.deleteResource(req.params.id as string);
     res.status(204).send();
   } catch {
     res.status(500).json({ error: 'Error al eliminar recurso' });

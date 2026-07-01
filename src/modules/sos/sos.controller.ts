@@ -22,7 +22,7 @@ export async function list(req: Request, res: Response) {
 
 export async function getById(req: Request, res: Response) {
   try {
-    const sos = await sosService.getSOSById(req.params.id);
+    const sos = await sosService.getSOSById(req.params.id as string);
     if (!sos) return res.status(404).json({ error: 'SOS no encontrado' });
     res.json(sos);
   } catch (error) {
@@ -32,7 +32,7 @@ export async function getById(req: Request, res: Response) {
 
 export async function update(req: AuthRequest, res: Response) {
   try {
-    const sos = await sosService.updateSOS(req.params.id, req.body);
+    const sos = await sosService.updateSOS(req.params.id as string, req.body);
     res.json(sos);
   } catch (error) {
     res.status(500).json({ error: 'Error al actualizar SOS' });
@@ -41,7 +41,7 @@ export async function update(req: AuthRequest, res: Response) {
 
 export async function remove(req: AuthRequest, res: Response) {
   try {
-    await sosService.deleteSOS(req.params.id);
+    await sosService.deleteSOS(req.params.id as string);
     res.status(204).send();
   } catch (error) {
     res.status(500).json({ error: 'Error al eliminar SOS' });
